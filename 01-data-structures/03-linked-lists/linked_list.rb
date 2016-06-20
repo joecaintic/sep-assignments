@@ -11,8 +11,7 @@ class LinkedList
   end
 
   # This method removes the last node in the lists and must keep the rest of the list intact.
-  def remove_tail
-      
+  def remove_tail  
       LinkedList.delete(@tail)
   end
 
