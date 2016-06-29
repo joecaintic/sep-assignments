@@ -17,4 +17,16 @@ Benchmark.bm do |x|
         end
     }
     
+    x.report("find item in array") {return new_array[4999]}
+    x.report("find item in linked list") {
+        current = list.@head
+            until current.data = 5000
+                current = current.next
+            end
+            return current
+    }
+    
+    x.report("delete item from array") {new_array.delete_at(4999)}
+    x.report("delete node from list") {list.delete(current)}
+    
 end
