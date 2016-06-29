@@ -1,0 +1,3 @@
+1. Spatial locality is a technique in which a processor will retrieve a range of locations from RAM, instead of just one, when requesting a piece of data not found in the cache and then storing this information in the cache. This increases performance since there is a high likelihood that data within range of the original piece of data will be accessed during a given process, and accessing cache is faster than accessing RAM. By storing the location information in the cache, the processor saves time and resources since it does not have to go back to the RAM to retrieve additional data that is near the location of the original data
+
+2. 
