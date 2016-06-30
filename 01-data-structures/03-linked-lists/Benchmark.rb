@@ -13,7 +13,14 @@ new_array = (1..10000).to_a
 
 
 Benchmark.bm do |x|
-    x.report("create new array") {bench_array = (1..10000).to_a}
+    x.report("create new array") {
+        bench_array = []
+        i = 1
+        until i === 10001
+            bench_array.push(i)
+                i += 1
+        end
+    }
     x.report("append to linked list") {
         bench_list = LinkedList.new
         i = 2
