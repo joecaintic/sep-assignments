@@ -1,0 +1,18 @@
+1. Spatial locality is a technique in which a processor will retrieve a range of locations from RAM, instead of just one, when requesting a piece of data not found in the cache and then storing this information in the cache. This increases performance since there is a high likelihood that data within range of the original piece of data will be accessed during a given process, and accessing cache is faster than accessing RAM. By storing the location information in the cache, the processor saves time and resources since it does not have to go back to the RAM to retrieve additional data that is near the location of the original data
+
+2. Here are my results:
+
+                      user     system      total        real
+create new array  0.000000   0.000000   0.000000 (  0.000871)
+append to linked list  0.010000   0.000000   0.010000 (  0.011848)
+find item in array  0.000000   0.000000   0.000000 (  0.000003)
+find item in linked list  0.000000   0.000000   0.000000 (  0.000006)
+delete item from array  0.000000   0.000000   0.000000 (  0.000009)
+delete node from list  0.000000   0.000000   0.000000 (  0.000003)
+
+
+Unexpectedly, creating a new array was quicker than appending to a linked list. This was due to the method I used, which pre-allocated memory for the array to use. Otherwise, appending to a linked list would’ve been quicker.
+
+Finding a value on an array was quicker than finding a node in a linked list, which was expected due to spatial locality in arrays. With linked lists, a computer must start from the beginning and traverse consecutively across each successive node until it finds the node it wants.
+
+Deleting from a node was quicker than deleting from an array. This is due to the fact that when a value is deleted from an array, the array must reallocate memory.
