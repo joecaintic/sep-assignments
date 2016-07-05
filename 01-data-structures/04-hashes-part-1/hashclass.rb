@@ -5,13 +5,21 @@ class HashClass
   end
 
   def []=(key, value)
+      @items.push(value)
+      @items[key] = value
   end
 
 
   def [](key)
+      if self.items[key] === true
+          return self.items[key].value
+      else
+          return " There is no value for that key"
+      end
   end
 
   def resize
+      self.items.size *= 2
   end
 
   # Returns a unique, deterministically reproducible index into an array
@@ -22,6 +30,7 @@ class HashClass
 
   # Simple method to return the number of items in the hash
   def size
+      return self.length
   end
 
 end
