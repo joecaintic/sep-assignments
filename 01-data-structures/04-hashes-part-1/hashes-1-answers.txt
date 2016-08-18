@@ -1,0 +1,1 @@
+Doubling the size of the underlying array is a poor idea because it is slow and will causes a number of open, unused slots to appear. The slowness means that it is using a lot of system resources (such as processing) and the presence of unused slots is an inefficient waste of storage space.
