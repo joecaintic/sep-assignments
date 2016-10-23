@@ -2,40 +2,46 @@ require_relative 'linked_list'
 
 class SeparateChaining
   attr_reader :max_load_factor
+  attr_reader :item_count
 
   def initialize(size)
     @items = Array.new(size)
-    @item_count = 0
+    @item_count = 0.0
     @max_load_factor = 0.7
   end
 
+  #does the key exist in the linked list already?
+  #if yes, then check value or update value if need be
+  #if no, add a whole new item to the list (make sure to update item count after doing this)
+  #ie. @items[index(key, @items.length)]
   def []=(key, value)
-    i = index(key, @items.size)
-    n = Node.new(key, value)
+    index =  self.index(key, @items.length)
+    
+    if @items[index].nil?
+        llist = LinkedList.new
+        @items[index] = llist
+    end
 
-    # COLLISION!
-    @items[i] != nil ? list = @items[i] : list = LinkedList.new
-
-    list.add_to_tail(n)
-    @items[i] = list
-    @item_count = @item_count + 1
-
-    # Resize the hash if the load factor grows too large
-    if load_factor.to_f > max_load_factor.to_f
-      resize
+    @items[index].add_to_tail(Node.new(key, value))
+    @item_count += 1
+    
+    if load_factor >= @max_load_factor
+        self.resize
     end
   end
 
+  #unlike previous lesson, you must look through list for the key
   def [](key)
-    list = @items.at(index(key, @items.size))
-    if list != nil
-      curr = list.head
-      while curr != nil
-        if curr.key == key
-          return curr.value
+    index =  self.index(key, @items.length)
+    if !@items[index].nil?
+        current = @items[index].head
+        until current.nil?
+            if current.key === key
+                return current.value
+            else
+                current = current.next
+            end
         end
-        curr = curr.next
-      end
     end
   end
 
@@ -43,48 +49,69 @@ class SeparateChaining
   # We are hashing based on strings, let's use the ascii value of each string as
   # a starting point.
   def index(key, size)
-    sum = 0
-
-    key.split("").each do |char|
-      if char.ord == 0
-        next
-      end
-
-      sum = sum + char.ord
-    end
-
-    sum % size
+      key.sum % size
   end
 
   # Calculate the current load factor
   def load_factor
-    @item_count / self.size.to_f
+      @item_count / @items.length
   end
 
-  # Simple method to return the number of items in the hash
   def size
-    @items.size
+      @items.length
   end
 
   # Resize the hash
+  #increase the amounts of buckets by two-times
+  #at each bucket, when you get to a non-nil bucket, you have to loop through a linked list now
+  #resize should be triggered if max load factor reached
+  
+  #consider resetting item count back to 0
   def resize
-    new_size = size*2
-    new_items = Array.new(new_size)
-    (0..@items.size-1).each do |i|
-      list = @items[i]
-      if list != nil
-        curr = list.head
-        # We only need to compute the new index once
-        new_index = index(curr.key, new_items.size)
-        while curr != nil
-          list = LinkedList.new
-          list.add_to_tail(curr)
-          new_items[new_index] = list
-          curr = curr.next
+    old_array = @items
+    @items = Array.new(old_array.length * 2)
+    old_array.each do |ll|
+        unless ll.nil?
+            current = ll.head
+            unless current.nil?
+                index = self.index(current.key, @items.length)
+                if @items[index].nil?
+                    @items[index] = LinkedList.new
+                    @items[index].add_to_tail(Node.new(current.key, current.value))
+                    if load_factor >= @max_load_factor
+                        self.resize
+                    end
+                    current = current.next
+                else
+                    @items[index].add_to_tail(Node.new(current.key, current.value))
+                    if load_factor >= @max_load_factor
+                        self.resize
+                    end
+                    current = current.next
+                end
+            end
         end
-      end
     end
-
-    @items = new_items
   end
+  
+  #prints state of the hash
+  def status
+      if @item_count === 0.0
+          puts "There are no entries in this hash."
+          puts "Load Factor for hash is 0."
+      else
+         @items.each do |ll|
+            unless ll.nil?
+                current = ll.head
+                index = self.index(current.key, @items.length)
+                until current.nil?
+                  puts "Entry #{current} is located at Index #{index} and has a value of " + "\"" + "#{current.value}" + "\"" + "."
+                  current = current.next
+                end
+            end
+          end
+          puts "Load Factor for hash is #{@item_count / @items.length}."
+      end
+  end
+  
 end
