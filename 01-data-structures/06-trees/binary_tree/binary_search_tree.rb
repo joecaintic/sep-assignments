@@ -16,18 +16,32 @@ class BinarySearchTree
 
   # Recursive Depth First Search
   def find(root, data)
-      match = root
       return nil if data.nil?
       if root.rating > data
-         find(match.left, data)
+         find(root.left, data)
       elsif root.rating < data
-         find(match.right, data)
+         find(root.right, data)
       else
-         return match
+         return root
       end
   end
 
   def delete(root, data)
+      #match = root
+      return nil if data.nil?
+      if root.rating > data
+          delete(root.left, data)
+      elsif root.rating < data
+          delete(root.right, data)
+      else
+          root = nil
+        #clone = data
+        #data = data.right
+        #clone.left.nil? ? nil : root.left = clone.left
+          # match.left = clone.left
+          # clone.left.nil? ? nil : self.insert(root, clone.left)
+          # clone.right.nil? ? nil : self.insert(root, clone.right)
+      end
   end
 
   # Recursive Breadth First Search
